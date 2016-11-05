@@ -1,8 +1,68 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+body{
+  background-color:rgba(0,0,0,1);
+}
+nav{
+  background-color:black;
+  padding-left:3.5%;
+  padding-right:3.5%;
+}
+#nav-mobile{
+  padding-right:3%;
+}
+.sort-select{
+  background-color:rgb(107, 209, 16);
+}
+.sort-unselect{
+  background-color:black;
+}
+.author .right{
+  margin-right:1%;
+}
+.btn-floating.btn-large.greener i{
+  background-color:rgb(107, 209, 16);
+}
+.btn-floating.btn-large.redder i{
+  background-color:red;
+}
+img{
+  width:100%;
+}
+.invalid{
+  background-color:red;
+}
+.grid{
+  padding-left:3.5%;
+  padding-right: 3.5%;
+}
+input[type=text].sort{
+  width:40%;
+}
+.brand-logo{
+  font-family: 'Cabin Sketch', cursive;
+  color:rgb(107, 209, 16);
+  font-size:100px;
+  margin-left:39%;
+}
+.new{
+  color:white;
+  padding-left:3.5%;
+  padding-right:3.5%;
+  background-color:rgba(255,255,255,0.1);
+  padding-bottom:2%;
+}
+.repeated-item.ng-enter, .repeated-item.ng-move {
+  transition: all 0.5s linear;
+  opacity: 0;
+}
+.repeated-item.ng-enter.ng-enter-active,
+.repeated-item.ng-move.ng-move-active {
+  opacity: 1;
+}
+.repeated-item.ng-leave {
+  animation: 0.5s my_animation;
 }
 
-a {
-  color: #00B7FF;
+@keyframes my_animation {
+  from { opacity:1; }
+  to { opacity:0; }
 }

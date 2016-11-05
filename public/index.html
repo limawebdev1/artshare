@@ -4,22 +4,28 @@
 <head>
   <meta charset="utf-8">
   <title>artshare</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+  <script src="https://code.angularjs.org/1.5.8/angular.js" charset="utf-8"></script>
+  <script src="https://code.angularjs.org/1.5.8/angular-route.js" charset="utf-8"></script>
+  <script src="https://code.angularjs.org/1.5.8/angular-cookies.js" charset="utf-8"></script>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.9.0/angular-moment.min.js"></script>
-  <script src="angulargrid.min.js"></script>
+  <script src="javascripts/angulargrid.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.js"></script>
-  <script src="app.js"></script>
+  <script src="javascripts/app.js"></script>
+  <script src="javascripts/routes.js"></script>
+  <script src="javascripts/controllers.js"></script>
+  <script src="javascripts/services.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
   <link href="https://fonts.googleapis.com/css?family=Cabin+Sketch" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="stylesheets/style.css">
+   <base href="/">
 </head>
 
-<body ng-controller="posts">
-  <a href="index.html" class="brand-logo">artshare</a>
+<body ng-controller="main">
+  <a class="brand-logo">artshare</a>
   <nav class="row">
     <input ng-model="searchTxt" type="text" class="sort" placeholder="Search posts..."></input>
     <a class="right btn-floating btn-large waves-effect waves-light greener btn" ng-click="newPost=true" ng-hide="newPost==true"><i class="material-icons">add</i></a>
@@ -60,5 +66,7 @@
       </div>
     </div>
   </div>
+
+  <div ng-view></div>
 </body>
 </html>
