@@ -1,14 +1,57 @@
 <link rel="stylesheet" href="../stylesheets/style.css">
 <script src="../javascripts/angulargrid.min.js"></script>
-<div class="grid">
-  <div angular-grid='vm.posts' ag-grid-width="400" ag-gutter-size="15" ag-angular-grid-id="gallery" ag-refresh-on-img-load="false">
-    <div data-ng-repeat="post in vm.posts" class="repeated-item grid-item card">
+<a class="brand-logo">artshare</a>
+<nav class="row">
+  <input ng-model="searchTxt" type="text" class="sort" placeholder="Search posts..."></input>
+  <a class="right btn-floating btn-large waves-effect waves-light greener btn" ng-click="newPost=true" ng-hide="newPost==true"><i class="material-icons">add</i></a>
+  <a class="right btn-floating btn-large waves-effect waves-light btn redder" ng-click="newPost=false" ng-show="newPost==true"><i class="material-icons">remove</i></a>
+  <ul id="nav-mobile" class="right hide-on-med-and-down">
+    <li>Sort by: &nbsp; &nbsp;</li>
+    <li>
+      <div ng-class="{'chip sort-select': sDate, 'chip sort-unselect': !sDate}">
+        <a href="#!" ng-click="sDate=true; sVotes=false; sTitle=false; sortBy('date')">date</a>
+      </div>
+    </li>
+    <li>
+      <div ng-class="{'chip sort-select': sVotes, 'chip sort-unselect': !sVotes}">
+        <a href="#!" ng-click="sVotes=true; sDate=false; sTitle = false; sortBy('votes')">votes</a>
+      </div>
+    </li>
+    <li>
+      <div ng-class="{'chip sort-select': sTitle, 'chip sort-unselect': !sTitle}">
+        <a href="#!" ng-click="sTitle=true; sDate=false; sVotes=false; sortBy('title')">title</a>
+      </div>
+    </li>
+  </ul>
+</nav>
+<div class="new row" ng-show="newPost==true">
+  <div class="col s12">
+    <h3>Create a New Post!</h3>
+    <div class="col s5">
+      <input type="text" placeholder="Title" ng-model="title" ng-class="{invalid: noTitle == true}"></input>
+      <input type="text" placeholder="Author" ng-model="author" ng-class="{invalid: noAuthor == true}"></input>
+      <input type="text" placeholder="Image URL" ng-model="img" ng-class="{invalid: noImg == true}"></input>
+    </div>
+    <div class="col s1"></div>
+    <div class="col s5">
+      <textarea id="textarea" class="materialize-textarea" placeholder="Description" ng-model="desc" ng-class="{invalid: noDesc == true}"></textarea>
+    </div>
+    <div class="col s12">
+      <a class="waves-effect waves-light btn right" ng-click="validate(); sortBy(type)">Submit</a>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="grid">
+  <div angular-grid='vm.posts' ag-grid-width="400" ag-gutter-size="15" ag-angular-grid-id="gallery" ag-refresh-on-img-load="false"> -->
+  <div class="row">
+    <div data-ng-repeat="post in vm.posts" class="col s4 repeated-item grid-item card">
       <div class="card-image">
         <img ng-src="{{post.img}}">
         <span class="card-title">{{post.title}}</span>
       </div>
       <div class="card-content">
-        <span>by: {{post.author}}</span>
+        <span>by: {{post.username}}</span>
         <span class="right"></span>
         <br>
         <br>
@@ -17,10 +60,11 @@
       <div class="card-action">
         <a href="#!" ng-click="post.votes = post.votes-1; sortBy(type)">-</a> {{post.votes}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <a href="#!" class="downvote" ng-click="post.votes = post.votes+1; sortBy(type)">+</a>
-        <a href="#!" class="activator right upvote" ng-click="vm.add=true"><i class="material-icons">add</i></a>
-        <a href="#!" class="center">
+        <a href="#!" ng-show="post.user_id == username" ng-click="editPost(post.id)" >EDIT</a>
+        <a href="#!" class="activator right" ng-click="vm.add=true"><i class="material-icons">add</i></a>
+        <!-- <a href="#!" class="center">
           <ng-pluralize count="post.comments.length" when="{'1': '{{post.comments.length}} comment','other': '{{post.comments.length}} comments'}" class="activator center" ng-click="view=true; vm.add=false"></ng-pluralize>
-        </a>
+        </a> -->
       </div>
       <div class="card-reveal">
         <div ng-show="vm.add">
@@ -43,4 +87,6 @@
       </div>
     </div>
   </div>
-</div>
+
+  <!-- </div>
+</div> -->
