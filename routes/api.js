@@ -12,6 +12,20 @@ router.get('/posts', function(req, res, next) {
     })
 });
 
+router.post('/editpost', (req, res, next) => {
+  knex('posts')
+    .where('id', req.body.id)
+    .returning('*')
+    .update({
+      title: req.body.title,
+      description: req.body.desc,
+      img: req.body.img
+    })
+    .then((post) => {
+      res.send(post);
+    })
+})
+
 router.post('/signup', (req, res, next) => {
   knex('users')
   .where('username', req.body.username)

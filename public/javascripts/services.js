@@ -10,8 +10,11 @@ app.service('postsService', function($http) {
     return response.data
    })
   },
-  editPost: function(post_id, user_id) {
-   return $http.post
+  editPost: function(id, title, desc, img) {
+    var reqObj = {id: id, title: title, desc: desc, img: img};
+   return $http.post('/api/editpost', reqObj).then(function(response){
+     return response.data;
+   })
   }
  }
 })

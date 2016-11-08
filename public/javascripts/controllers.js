@@ -12,9 +12,14 @@ app.controller('main', function($scope, $cookies, postsService, cookieService) {
   $scope.$on('cookiesDetected', function(){
     $scope.username = cookieService.decodeCookies($cookies.get('artshare'));
   })
-  $scope.editPost = function(id){
-    postsService.editPost(id).then(function(response){});
+  $scope.editPost = function(id, title, desc, img){
+    postsService.editPost(id, title, desc, img).then(function(response){});
   };
+  $scope.logout = function(){
+    $cookies.remove('artshare')
+    $cookies.remove('artshare.sig')
+    $scope.username = null
+  }
 })
 
 app.controller('auth', function($scope, $cookieStore, authService){

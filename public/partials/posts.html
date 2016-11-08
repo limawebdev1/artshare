@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="../stylesheets/style.css">
 <script src="../javascripts/angulargrid.min.js"></script>
 <a class="brand-logo">artshare</a>
+<a href="#" ng-click="logout()">Log Out</a>
 <nav class="row">
   <input ng-model="searchTxt" type="text" class="sort" placeholder="Search posts..."></input>
   <a class="right btn-floating btn-large waves-effect waves-light greener btn" ng-click="newPost=true" ng-hide="newPost==true"><i class="material-icons">add</i></a>
@@ -44,49 +45,73 @@
 
 <!-- <div class="grid">
   <div angular-grid='vm.posts' ag-grid-width="400" ag-gutter-size="15" ag-angular-grid-id="gallery" ag-refresh-on-img-load="false"> -->
-  <div class="row">
-    <div data-ng-repeat="post in vm.posts" class="col s4 repeated-item grid-item card">
-      <div class="card-image">
-        <img ng-src="{{post.img}}">
-        <span class="card-title">{{post.title}}</span>
-      </div>
-      <div class="card-content">
-        <span>by: {{post.username}}</span>
-        <span class="right"></span>
-        <br>
-        <br>
-        <p>{{post.description}}</p>
-      </div>
-      <div class="card-action">
-        <a href="#!" ng-click="post.votes = post.votes-1; sortBy(type)">-</a> {{post.votes}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="#!" class="downvote" ng-click="post.votes = post.votes+1; sortBy(type)">+</a>
-        <a href="#!" ng-show="post.user_id == username" ng-click="editPost(post.id)" >EDIT</a>
-        <a href="#!" class="activator right" ng-click="vm.add=true"><i class="material-icons">add</i></a>
-        <!-- <a href="#!" class="center">
+<div class="row">
+  <div data-ng-repeat="post in vm.posts" class="col s4 repeated-item grid-item card">
+    <div class="card-image">
+      <img ng-src="{{post.img}}">
+      <span class="card-title">{{post.title}}</span>
+    </div>
+    <div class="card-content">
+      <span>by: {{post.username}}</span>
+      <span class="right"></span>
+      <br>
+      <br>
+      <p>{{post.description}}</p>
+    </div>
+    <div class="card-action">
+      <a href="#!" ng-click="post.votes = post.votes-1; sortBy(type)">-</a> {{post.votes}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="#!" class="downvote" ng-click="post.votes = post.votes+1; sortBy(type)">+</a>
+      <a href="#!" class="activator right" ng-show="post.user_id == username" ng-click="vm.add=false; vm.edit=true">EDIT</a>
+      <a href="#!" class="activator right" ng-click="vm.add=true; vm.edit=false;"><i class="material-icons">add</i></a>
+      <!-- <a href="#!" class="center">
           <ng-pluralize count="post.comments.length" when="{'1': '{{post.comments.length}} comment','other': '{{post.comments.length}} comments'}" class="activator center" ng-click="view=true; vm.add=false"></ng-pluralize>
         </a> -->
+    </div>
+    <div class="card-reveal">
+      <div ng-show="vm.add">
+        <span class="card-title grey-text text-darken-4">Add a Comment<i class="material-icons right" ng-click="vm.add=false;view=false">close</i></span>
+        <input class="col s5" type="text" placeholder="Author" ng-model="cAuth" ng-class="{invalid: cNoAuth == true}"></input>
+        <textarea class="col s5 materialize-textarea" type="text" placeholder="Write something here..." ng-model="cComment" ng-class="{invalid: cNoComment == true}"></textarea>
+        <a class="waves-effect waves-light btn right" ng-click="cValidate(post.id, cAuth, cComment); cAuth=undefined; cComment=undefined;">Submit</a>
       </div>
-      <div class="card-reveal">
-        <div ng-show="vm.add">
-          <span class="card-title grey-text text-darken-4">Add a Comment<i class="material-icons right" ng-click="vm.add=false;view=false">close</i></span>
-          <input class="col s5" type="text" placeholder="Author" ng-model="cAuth" ng-class="{invalid: cNoAuth == true}"></input>
-          <textarea class="col s5 materialize-textarea" type="text" placeholder="Write something here..." ng-model="cComment" ng-class="{invalid: cNoComment == true}"></textarea>
-          <a class="waves-effect waves-light btn right" ng-click="cValidate(post.id, cAuth, cComment); cAuth=undefined; cComment=undefined;">Submit</a>
+      <div ng-show="view">
+        <span ng-click="vm.add=false;view=false" class="card-title grey-text text-darken-4"><i class="material-icons right">close</i></span>
+        <h4>Comments</h4>
+        <hr> {{posts.comments}}
+        <div ng-repeat="comment in post.comments">
+          <h5>{{comment.author}}</h5>
+          <p>
+            {{comment.comment}}
+          </p>
         </div>
-        <div ng-show="view==true">
-          <span ng-click="vm.add=false;view=false" class="card-title grey-text text-darken-4"><i class="material-icons right">close</i></span>
-          <h4>Comments</h4>
-          <hr> {{posts.comments}}
-          <div ng-repeat="comment in post.comments">
-            <h5>{{comment.author}}</h5>
-            <p>
-              {{comment.comment}}
-            </p>
+      </div>
+      <div ng-show="vm.edit">
+        <span ng-click="vm.add=false;view=false;vm.edit=true" class="card-title grey-text text-darken-4"><i class="material-icons right">close</i></span>
+        <h4>Edit Your Post</h4>
+        <hr>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="title" type="text" ng-model="post.title"></input>
+            <label for="title">Title</label>
           </div>
         </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="img" type="text" ng-model="post.img"></input>
+            <label for="img">Image URL</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <textarea id="desc" class="materialize-textarea" ng-model="post.description" type="text"></textarea>
+            <label for="desc">Description</label>
+          </div>
+        </div>
+        <a class="waves-effect waves-light btn right" ng-click="editPost(post.id, post.title, post.description, post.img); vm.edit=false">Submit</a>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- </div>
+<!-- </div>
 </div> -->
