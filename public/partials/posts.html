@@ -62,6 +62,7 @@
       <a href="#!" ng-click="post.votes = post.votes-1; sortBy(type)">-</a> {{post.votes}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <a href="#!" class="downvote" ng-click="post.votes = post.votes+1; sortBy(type)">+</a>
       <a href="#!" class="activator right" ng-show="post.user_id == username" ng-click="vm.add=false; vm.edit=true">EDIT</a>
+      <a href="#!" ng-show="post.user_id == username" ng-click="deletePost(post.id)">DELETE</a>
       <a href="#!" class="activator right" ng-click="vm.add=true; vm.edit=false;"><i class="material-icons">add</i></a>
       <!-- <a href="#!" class="center">
           <ng-pluralize count="post.comments.length" when="{'1': '{{post.comments.length}} comment','other': '{{post.comments.length}} comments'}" class="activator center" ng-click="view=true; vm.add=false"></ng-pluralize>

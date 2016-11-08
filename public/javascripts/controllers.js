@@ -1,5 +1,8 @@
 app.controller('main', function($scope, $cookies, postsService, cookieService) {
   $scope.vm = {};
+  $scope.vm.add = false;
+  $scope.view = false;
+  $scope.vm.edit = false;
   postsService.getPosts().then((data) => {
     $scope.vm.posts = data;
   })
@@ -15,6 +18,11 @@ app.controller('main', function($scope, $cookies, postsService, cookieService) {
   $scope.editPost = function(id, title, desc, img){
     postsService.editPost(id, title, desc, img).then(function(response){});
   };
+  $scope.deletePost = function(id){
+    postsService.deletePost(id).then(function(response){
+      $scope.vm.posts = response;
+    });
+  }
   $scope.logout = function(){
     $cookies.remove('artshare')
     $cookies.remove('artshare.sig')

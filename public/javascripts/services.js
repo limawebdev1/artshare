@@ -11,9 +11,22 @@ app.service('postsService', function($http) {
    })
   },
   editPost: function(id, title, desc, img) {
-    var reqObj = {id: id, title: title, desc: desc, img: img};
-   return $http.post('/api/editpost', reqObj).then(function(response){
-     return response.data;
+   var reqObj = {
+    id: id,
+    title: title,
+    desc: desc,
+    img: img
+   };
+   return $http.post('/api/editpost', reqObj).then(function(response) {
+    return response.data;
+   })
+  },
+  deletePost: function(id) {
+   var reqObj = {
+    id: id
+   };
+   return $http.post('/api/delpost', reqObj).then(function(response) {
+    return response.data;
    })
   }
  }

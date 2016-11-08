@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt')
 router.get('/posts', function(req, res, next) {
   knex('posts')
     .innerJoin('users', 'posts.user_id', 'users.id')
+    .select('posts.id as id', 'username', 'title', 'description', 'img', 'votes', 'user_id')
     .then((posts) => {
       res.send(posts);
     })
@@ -24,6 +25,19 @@ router.post('/editpost', (req, res, next) => {
     .then((post) => {
       res.send(post);
     })
+})
+
+router.post('/delpost', (req, res, next) => {
+  knex('posts')
+    .where('id', req.body.id)
+    .del()
+    .then(
+      knex('posts')
+        .then((posts) => {
+          console.log(posts);
+          res.send(posts);
+        })
+    );
 })
 
 router.post('/signup', (req, res, next) => {
