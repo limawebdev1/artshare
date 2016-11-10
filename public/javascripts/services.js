@@ -5,7 +5,7 @@ app.service('postsService', function($http) {
     return data.data;
    })
   },
-  newPost: function(post) {
+  createPost: function(post) {
    return $http.post('/api/newpost', post).then(function(response) {
     return response.data
    })

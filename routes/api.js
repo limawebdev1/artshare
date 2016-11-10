@@ -13,6 +13,24 @@ router.get('/posts', function(req, res, next) {
     })
 });
 
+router.post('/newpost', (req, res, next) => {
+  knex('posts')
+    .returning('*')
+    .insert({
+      title: req.body.title,
+      user_id: req.session.userInfo.id,
+      img: req.body.img,
+      description: req.body.description,
+      votes: 0
+    })
+    .then((data1) => {
+      knex('posts')
+      .then((data) => {
+        res.json(data);
+      })
+    });
+})
+
 router.post('/editpost', (req, res, next) => {
   knex('posts')
     .where('id', req.body.id)
@@ -32,11 +50,12 @@ router.post('/delpost', (req, res, next) => {
     .where('id', req.body.id)
     .del()
     .then(
-      knex('posts')
-        .then((posts) => {
-          console.log(posts);
-          res.send(posts);
-        })
+      (posts) => {
+        knex('posts')
+          .then((posts1) => {
+            res.send(posts1);
+          })
+      }  
     );
 })
 
