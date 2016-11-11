@@ -43,16 +43,16 @@ app.controller('main', function($scope, $cookies, postsService, cookieService, $
   }
   if ($scope.valid == true) {
    var obj = {
-    id: $scope.vm.posts.length+2,
+    id: $scope.vm.posts.length+1,
     title: $scope.title,
-    author: $scope.author,
     img: $scope.img,
     description: $scope.desc,
+    created_at: new Date(),
     votes:0
    };
    postsService.createPost(obj).then((response) => {
-     $scope.vm.allPosts.push(obj);
-     $scope.vm.posts.push(obj);
+     console.log(response);
+     $scope.vm.posts = response;
      $scope.sortBy($scope.type);
    })
    $scope.title = undefined;
@@ -61,6 +61,18 @@ app.controller('main', function($scope, $cookies, postsService, cookieService, $
    $scope.desc = undefined;
    $scope.newPost = false;
   }
+ }
+ $scope.changeVotes = function(sym, id){
+   sym == '+' ? postsService.changeVotes(1, id).then((response)=>{
+     $scope.vm.posts.forEach((post,i,arr) => {
+       id == post.id ? post.votes++:null
+     })
+   }):postsService.changeVotes(-1, id).then((response) => {
+     $scope.vm.posts.forEach((post,i,arr) => {
+       id == post.id ? post.votes--:null
+     })
+   });
+   $scope.sortBy($scope.type)
  }
  $scope.sortBy = function(type) {
   if (type == 'date') {
@@ -90,7 +102,6 @@ app.controller('main', function($scope, $cookies, postsService, cookieService, $
    $scope.type = 'title';
   }
  }
-
  $scope.cookies = $cookies.getAll();
  $scope.$watch('cookies', function() {
   if ($cookies.getAll().artshare) {
@@ -111,6 +122,7 @@ app.controller('main', function($scope, $cookies, postsService, cookieService, $
     $scope.vm.posts.forEach((post,i,arr) => {
       id == post.id ? arr.splice(i,1):null
     })
+    $scope.sortBy($scope.type);
   });
  }
  $scope.logout = function() {

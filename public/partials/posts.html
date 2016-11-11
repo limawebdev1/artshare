@@ -1,7 +1,9 @@
-<link rel="stylesheet" href="../stylesheets/style.css">
-<script src="../javascripts/angulargrid.min.js"></script>
-<a class="brand-logo">artshare</a>
-<a href="#" ng-click="logout()">Log Out</a>
+<div class="row center">
+  <div class="col s12">
+    <a class="brand-logo">artshare</a>&nbsp;&nbsp;&nbsp;
+    <a href="#" ng-click="logout()">Log Out</a>
+  </div>
+</div>
 <nav class="row">
   <input ng-model="searchTxt" type="text" class="sort" placeholder="Search posts..."></input>
   <a class="right btn-floating btn-large waves-effect waves-light greener btn" ng-click="newPost=true" ng-hide="newPost==true"><i class="material-icons">add</i></a>
@@ -50,21 +52,22 @@
         <span class="card-title">{{post.title}}</span>
       </div>
       <div class="card-content">
-        <span>by: {{post.username}}</span>
-        <span class="right"></span>
-        <br>
-        <br>
-        <p>{{post.description}}</p>
+        <span>by: {{post.username}} </span>
+        <a ng-show="post.user_id == username" ng-click="deletePost(post.id)" class="carda right btn-floating btn-small waves-effect waves-light red"><i class="material-icons">delete</i></a>
+        <a ng-show="post.user_id == username" ng-click="vm.add=false; vm.edit=true" class="carda activator right btn-floating btn-small waves-effect waves-light green"><i class="material-icons">mode_edit</i></a>
+        <br><br>
+        <p>{{post.description}}</p><br>
+        <p class="right">
+          {{post.updated_at | amCalendar}}
+        </p><br>
       </div>
       <div class="card-action">
-        <a ng-click="post.votes = post.votes-1; sortBy(type)">-</a> {{post.votes}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a class="downvote" ng-click="post.votes = post.votes+1; sortBy(type)">+</a>
-        <a class="activator right" ng-show="post.user_id == username" ng-click="vm.add=false; vm.edit=true">EDIT</a>
-        <a ng-show="post.user_id == username" ng-click="deletePost(post.id)">DELETE</a>
+        <a ng-click="changeVotes('-', post.id)">-</a> {{post.votes}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a class="downvote" ng-click="changeVotes('+', post.id)">+</a>
         <a class="activator right" ng-click="vm.add=true; vm.edit=false;"><i class="material-icons">add</i></a>
-        <!-- <a   class="center">
+        <a class="center">
             <ng-pluralize count="post.comments.length" when="{'1': '{{post.comments.length}} comment','other': '{{post.comments.length}} comments'}" class="activator center" ng-click="view=true; vm.add=false"></ng-pluralize>
-          </a> -->
+          </a>
       </div>
       <div class="card-reveal">
         <div ng-show="vm.add">
@@ -78,9 +81,9 @@
           <h4>Comments</h4>
           <hr> {{posts.comments}}
           <div ng-repeat="comment in post.comments">
-            <h5>{{comment.author}}</h5>
+            <h5>{{comment.username}}</h5>
             <p>
-              {{comment.comment}}
+              {{comment.description}}
             </p>
           </div>
         </div>

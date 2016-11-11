@@ -7,9 +7,21 @@ const bcrypt = require('bcrypt')
 router.get('/posts', function(req, res, next) {
   knex('posts')
     .innerJoin('users', 'posts.user_id', 'users.id')
-    .select('posts.id as id', 'username', 'title', 'description', 'img', 'votes', 'user_id')
+    .select('posts.id as id', 'username', 'title', 'description', 'img', 'votes', 'user_id', 'comments', 'updated_at')
     .then((posts) => {
-      res.send(posts);
+      posts.sort(function(a, b){
+        return a.id - b.id
+      })
+      knex('comments')
+      .innerJoin('users', 'comments.user_id', 'users.id')
+      .select('comments.id as id', 'username', 'description', 'post_id')
+      .then((comments) => {
+        for(var i = 0; i < comments.length; i++){
+          var index = comments[i].post_id - 1;
+          posts[index].comments.push(comments[i]);
+        }
+        res.json(posts);
+      })
     })
 });
 
@@ -21,13 +33,31 @@ router.post('/newpost', (req, res, next) => {
       user_id: req.session.userInfo.id,
       img: req.body.img,
       description: req.body.description,
-      votes: 0
+      votes: 0,
+      comments: []
     })
     .then((data1) => {
       knex('posts')
-      .then((data) => {
-        res.json(data);
-      })
+        .innerJoin('users', 'posts.user_id', 'users.id')
+        .select('posts.id as id', 'username', 'title', 'description', 'img', 'votes', 'user_id', 'comments', 'updated_at')
+        .then((posts) => {
+          posts.sort(function(a, b){
+            return a.id - b.id
+          })
+          knex('comments')
+          .innerJoin('users', 'comments.user_id', 'users.id')
+          .select('comments.id as id', 'username', 'description', 'post_id')
+          .then((comments) => {
+            comments.sort(function(a, b){
+              return a.id - b.id
+            })
+            for(var i = 0; i < comments.length; i++){
+              var index = comments[i].post_id - 1;
+              posts[index].comments.push(comments[i]);
+            }
+            res.json(posts);
+          })
+        })
     });
 })
 
@@ -44,6 +74,39 @@ router.post('/editpost', (req, res, next) => {
       res.send(post);
     })
 })
+router.post('/changeVote', (req, res, next) => {
+  knex('posts')
+    .where('id', req.body.id)
+    .then((post) => {
+      var postVotes = post[0].votes;
+      knex('posts')
+      .where('id', req.body.id)
+      .returning('*')
+      .update({
+        votes: postVotes+req.body.num
+      })
+      .then((result) => {
+        knex('posts')
+          .innerJoin('users', 'posts.user_id', 'users.id')
+          .select('posts.id as id', 'username', 'title', 'description', 'img', 'votes', 'user_id', 'comments', 'updated_at')
+          .then((posts) => {
+            posts.sort(function(a, b){
+              return a.id - b.id
+            })
+            knex('comments')
+            .innerJoin('users', 'comments.user_id', 'users.id')
+            .select('comments.id as id', 'username', 'description', 'post_id')
+            .then((comments) => {
+              for(var i = 0; i < comments.length; i++){
+                var index = comments[i].post_id - 1;
+                posts[index].comments.push(comments[i]);
+              }
+              res.json(posts);
+            })
+          })
+      })
+    })
+})
 
 router.post('/delpost', (req, res, next) => {
   knex('posts')
@@ -55,7 +118,7 @@ router.post('/delpost', (req, res, next) => {
           .then((posts1) => {
             res.send(posts1);
           })
-      }  
+      }
     );
 })
 

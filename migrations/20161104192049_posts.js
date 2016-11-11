@@ -14,6 +14,7 @@ exports.up = function(knex) {
       .notNullable();
     table.string('img')
       .notNullable();
+    table.specificType('comments', 'text[]');
     table.timestamps(true, true);
   });
 };

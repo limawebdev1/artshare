@@ -28,7 +28,13 @@ app.service('postsService', function($http) {
    return $http.post('/api/delpost', reqObj).then(function(response) {
     return response.data;
    })
-  }
+ },
+ changeVotes: function(num, id) {
+   var reqObj = {num: num, id: id};
+   return $http.post('/api/changeVote', reqObj).then(function(response){
+     return response.data;
+   })
+ }
  }
 })
 app.service('authService', function($http, $location) {

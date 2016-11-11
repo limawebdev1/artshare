@@ -34,6 +34,14 @@ img{
   padding-left:3.5%;
   padding-right: 3.5%;
 }
+a{
+  color:white;
+  text-decoration:white;
+}
+.btn-floating{
+  margin-right:5px;
+  margin-left:5px;
+}
 input[type=text].sort{
   width:40%;
 }
@@ -41,7 +49,6 @@ input[type=text].sort{
   font-family: 'Cabin Sketch', cursive;
   color:rgb(107, 209, 16);
   font-size:100px;
-  margin-left:39%;
 }
 .new{
   color:white;
@@ -65,4 +72,10 @@ input[type=text].sort{
 @keyframes my_animation {
   from { opacity:1; }
   to { opacity:0; }
+}
+.btn, .btn-large {
+  background-color: rgb(107, 209, 16);
+}
+.login{
+  margin-top:10%;
 }
