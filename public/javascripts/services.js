@@ -37,6 +37,45 @@ app.service('postsService', function($http) {
  }
  }
 })
+app.service('commentsService', function($http) {
+ return {
+  getPosts: function() {
+   return $http.get('/api/posts').then(function(data) {
+    return data.data;
+   })
+  },
+  createPost: function(post) {
+   return $http.post('/api/newpost', post).then(function(response) {
+    return response.data
+   })
+  },
+  editPost: function(id, title, desc, img) {
+   var reqObj = {
+    id: id,
+    title: title,
+    desc: desc,
+    img: img
+   };
+   return $http.post('/api/editpost', reqObj).then(function(response) {
+    return response.data;
+   })
+  },
+  deletePost: function(id) {
+   var reqObj = {
+    id: id
+   };
+   return $http.post('/api/delpost', reqObj).then(function(response) {
+    return response.data;
+   })
+ },
+ changeVotes: function(num, id) {
+   var reqObj = {num: num, id: id};
+   return $http.post('/api/changeVote', reqObj).then(function(response){
+     return response.data;
+   })
+ }
+ }
+})
 app.service('authService', function($http, $location) {
  return {
   signup: function(userObj) {

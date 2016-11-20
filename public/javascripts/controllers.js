@@ -12,6 +12,7 @@ app.controller('main', function($scope, $cookies, postsService, cookieService, $
  $scope.commentDisp = false;
  $scope.vm.posts = [];
  $scope.vm.allPosts = [];
+ $scope.action=true;
  postsService.getPosts().then((data) => {
   $scope.vm.posts = data;
   $scope.vm.allPosts = data;
@@ -60,15 +61,15 @@ app.controller('main', function($scope, $cookies, postsService, cookieService, $
        updated_at: obj.updated_at,
        votes:0, comments:[]
      });
-    //    $scope.vm.allPosts.push({
-    //      id:$scope.vm.posts.length+1,
-    //      title: $scope.title,
-    //      img: $scope.img,
-    //      description: $scope.desc,
-    //      username: $scope.username,
-    //      created_at: new Date(),
-    //      votes:0});
-    //    console.log($scope.vm.posts);
+     $scope.vm.allPosts.push({
+       id:$scope.vm.posts.length+1,
+       title: obj.title,
+       img: obj.img,
+       description: obj.description,
+       username: $scope.username,
+       updated_at: obj.updated_at,
+       votes:0, comments:[]
+     });
      $scope.sortBy($scope.type);
    })
    $scope.title = undefined;
