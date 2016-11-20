@@ -54,7 +54,7 @@ app.service('authService', function($http, $location) {
 app.service('cookieService', function($cookies) {
  return {
   decodeCookies: function(cookie) {
-   return JSON.parse(atob(cookie)).userInfo.id;
+   return JSON.parse(atob(cookie)).userInfo.username;
   }
  }
 })

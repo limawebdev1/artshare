@@ -47,12 +47,28 @@ app.controller('main', function($scope, $cookies, postsService, cookieService, $
     title: $scope.title,
     img: $scope.img,
     description: $scope.desc,
-    created_at: new Date(),
+    updated_at: new Date(),
     votes:0
    };
    postsService.createPost(obj).then((response) => {
-     console.log(response);
-     $scope.vm.posts = response;
+     $scope.vm.posts.push({
+       id:$scope.vm.posts.length+1,
+       title: obj.title,
+       img: obj.img,
+       description: obj.description,
+       username: $scope.username,
+       updated_at: obj.updated_at,
+       votes:0, comments:[]
+     });
+    //    $scope.vm.allPosts.push({
+    //      id:$scope.vm.posts.length+1,
+    //      title: $scope.title,
+    //      img: $scope.img,
+    //      description: $scope.desc,
+    //      username: $scope.username,
+    //      created_at: new Date(),
+    //      votes:0});
+    //    console.log($scope.vm.posts);
      $scope.sortBy($scope.type);
    })
    $scope.title = undefined;
