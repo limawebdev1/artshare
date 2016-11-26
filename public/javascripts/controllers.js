@@ -2,8 +2,7 @@ app.controller('main', function($scope, $cookies, postsService, commentsService,
  $scope.view = false;
  $scope.vm = {};
  $scope.searchTxt = "";
- $scope.vm.add = false;
- $scope.vm.edit = false;
+ $scope.default = true;
  $scope.type = 'date';
  $scope.hidePost = true;
  $scope.sDate = true;
@@ -92,9 +91,31 @@ app.controller('main', function($scope, $cookies, postsService, commentsService,
      }
      $scope.vm.posts[elem].comments.push(obj);
    });
-   $scope.view = true;
-   $scope.vm.add = false;
   }
+ }
+ $scope.editComment = function(c_id, comment){
+   var obj={
+     id: c_id,
+     description: comment
+   };
+   commentsService.editComment(obj).then((response) => {
+   })
+ }
+ $scope.deleteComment = function(p_id, c_id){
+   commentsService.deleteComment(c_id).then((response) => {
+     for(var i = 0; i < $scope.vm.posts.length; i++){
+       if($scope.vm.posts[i].id == p_id){
+         $scope.vm.allPosts[i].comments.forEach((comment, i, arr) => {
+           c_id == comment.id ? arr.splice(i,1):null
+         })
+         $scope.vm.posts[i].comments.forEach((comment,i,arr) => {
+           c_id == comment.id ? arr.splice(i,1):null
+         })
+         $scope.sortBy($scope.type);
+         break;
+       }
+     }
+   })
  }
  $scope.changeVotes = function(sym, id){
    sym == '+' ? postsService.changeVotes(1, id).then((response)=>{

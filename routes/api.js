@@ -154,7 +154,59 @@ router.post('/comment', (req, res, next) => {
             })
         })
     })
-
+})
+router.post('/editComment', (req, res, next) => {
+  knex('comments')
+    .where('id', req.body.id)
+    .update({
+      description: req.body.description
+    })
+    .then((comment) => {
+      knex('posts')
+        .innerJoin('users', 'posts.user_id', 'users.id')
+        .select('posts.id as id', 'username', 'title', 'description', 'img', 'votes', 'user_id', 'comments', 'updated_at')
+        .then((posts) => {
+          posts.sort(function(a, b){
+            return a.id - b.id
+          })
+          knex('comments')
+          .innerJoin('users', 'comments.user_id', 'users.id')
+          .select('comments.id as id', 'username', 'description', 'post_id')
+          .then((comments) => {
+            for(var i = 0; i < comments.length; i++){
+              var index = comments[i].post_id - 1;
+              posts[index].comments.push(comments[i]);
+            }
+            res.json(posts);
+          })
+        })
+    })
+})
+router.post('/delComment', (req, res, next) => {
+  console.log(req.body);
+  knex('comments')
+    .where('id', req.body.id)
+    .del()
+    .then((comment) => {
+      knex('posts')
+        .innerJoin('users', 'posts.user_id', 'users.id')
+        .select('posts.id as id', 'username', 'title', 'description', 'img', 'votes', 'user_id', 'comments', 'updated_at')
+        .then((posts) => {
+          posts.sort(function(a, b){
+            return a.id - b.id
+          })
+          knex('comments')
+          .innerJoin('users', 'comments.user_id', 'users.id')
+          .select('comments.id as id', 'username', 'description', 'post_id')
+          .then((comments) => {
+            for(var i = 0; i < comments.length; i++){
+              var index = comments[i].post_id - 1;
+              posts[index].comments.push(comments[i]);
+            }
+            res.json(posts);
+          })
+        })
+    })
 })
 router.post('/signup', (req, res, next) => {
   knex('users')

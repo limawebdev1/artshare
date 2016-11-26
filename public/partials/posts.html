@@ -47,14 +47,14 @@
 <div class="grid">
   <div angular-grid='vm.posts' ag-grid-width="400" ag-gutter-size="15" ag-angular-grid-id="gallery" ag-refresh-on-img-load="false">
     <div data-ng-repeat="post in vm.posts" class="col s4 repeated-item grid-item card">
-      <div class="card-image">
+      <div ng-show="default" class="card-image">
         <img ng-src="{{post.img}}">
         <span class="card-title">{{post.title}}</span>
       </div>
-      <div class="card-content">
+      <div ng-show="default" class="card-content">
         <span>by: {{post.username}} </span>
         <a ng-show="post.username == username" ng-click="deletePost(post.id)" class="carda right btn-floating btn-small waves-effect waves-light red"><i class="material-icons">delete</i></a>
-        <a ng-show="post.username == username" ng-click="action=false; vm.add=false; vm.edit=true" class="carda activator right btn-floating btn-small waves-effect waves-light green"><i class="material-icons">mode_edit</i></a>
+        <a ng-show="post.username == username" ng-click="editPst=true;" class="carda activator right btn-floating btn-small waves-effect waves-light green"><i class="material-icons">mode_edit</i></a>
         <br>
         <br>
         <p>{{post.description}}</p>
@@ -64,33 +64,46 @@
         </p>
         <br>
       </div>
-      <div class="card-action" ng-show="action==true">
+      <div ng-show="default" class="card-action">
         <a ng-click="changeVotes('-', post.id)">-</a> {{post.votes}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <a class="downvote" ng-click="changeVotes('+', post.id)">+</a>
-        <a class="activator right" ng-click="action=false; vm.add=true; vm.edit=false;"><i class="material-icons">add</i></a>
+        <a class="activator right" ng-click="addComm=true; done=false;"><i class="material-icons">add</i></a>
         <a class="center">
-          <ng-pluralize count="post.comments.length" when="{'1': '{{post.comments.length}} comment','other': '{{post.comments.length}} comments'}" class="activator center" ng-click="action=false; view=true; vm.add=false"></ng-pluralize>
+          <ng-pluralize count="post.comments.length" when="{'1': '{{post.comments.length}} comment','other': '{{post.comments.length}} comments'}" class="activator center" ng-click="viewComm=true; done=false;"></ng-pluralize>
         </a>
       </div>
-      <div class="card-reveal" ng-hide="action">
-        <div ng-show="vm.add">
-          <span class="card-title grey-text text-darken-4">Add a Comment<i class="material-icons right" ng-click="vm.add=false;view=false; action=true;">close</i></span>
+      <div ng-hide="done" class="card-reveal">
+        <div ng-show="addComm">
+          <span class="card-title grey-text text-darken-4">Add a Comment<i class="material-icons right" ng-click="addComm=false; default=true; done=true;">close</i></span>
           <textarea class="col s5 materialize-textarea" type="text" placeholder="Write something here..." ng-model="cComment" ng-class="{invalid: cNoComment == true}"></textarea>
-          <a class="waves-effect waves-light btn right" ng-click="cValidate(post.id, cComment); cAuth=undefined; cComment=undefined; action=true;">Submit</a>
+          <a class="waves-effect waves-light btn right" ng-click="cValidate(post.id, cComment); cAuth=undefined; cComment=undefined; addComm=false; default=true; done=true;">Submit</a>
         </div>
-        <div ng-show="view">
-          <span ng-click="vm.add=false;view=false" class="card-title grey-text text-darken-4"><i class="material-icons right">close</i></span>
+        <div ng-show="viewComm">
+          <span ng-click="default=true; viewComm=false;" class="card-title grey-text text-darken-4"><i class="material-icons right">close</i></span>
           <h4>Comments</h4>
-          <hr> {{posts.comments}}
-          <div ng-repeat="comment in post.comments">
+          <hr>
+          <div class="row" ng-repeat="comment in post.comments">
             <h5>{{comment.username}}</h5>
-            <p>
-              {{comment.description}}
-            </p>
+            <div ng-show="!editComm" class="col s8">
+                {{comment.description}}
+            </div>
+            <form ng-show="editComm" class="col s8">
+              <div class="row">
+                <div class="input-field col s12">
+                  <textarea id="desc" class="materialize-textarea" ng-model="comment.description" type="text"></textarea>
+                  <label class="active" for="desc">Description</label>
+                </div>
+              </div>
+              <a class="waves-effect waves-light btn right" ng-click="editComment(comment.id, comment.description); editComm=false; default=true; done=true;">Submit</a>
+            </form>
+            <div class="col s4">
+              <a ng-show="comment.username == username" class="carda btn-floating btn-small waves-effect waves-light green activator" ng-click="editComm=true;"><i class="material-icons">mode_edit</i></a>
+              <a ng-show="comment.username == username" class="carda btn-floating btn-small waves-effect waves-light red"><i class="material-icons" ng-click="deleteComment(comment.post_id, comment.id)">delete</i></a>
+            </div>
           </div>
         </div>
-        <div ng-show="vm.edit">
-          <span ng-click="vm.add=false;view=false;vm.edit=true" class="card-title grey-text text-darken-4"><i class="material-icons right">close</i></span>
+        <div ng-show="editPst">
+          <span ng-click="editPst=false; default=true" class="card-title grey-text text-darken-4"><i class="material-icons right">close</i></span>
           <h4>Edit Your Post</h4>
           <hr>
           <form class="col s12">
@@ -112,7 +125,7 @@
                 <label class="active" for="desc">Description</label>
               </div>
             </div>
-            <a class="waves-effect waves-light btn right" ng-click="editPost(post.id, post.title, post.description, post.img); vm.edit=false; action=true">Submit</a>
+            <a class="waves-effect waves-light btn right" ng-click="editPost(post.id, post.title, post.description, post.img); editPst=false; default=true; done=true;">Submit</a>
           </form>
         </div>
       </div>

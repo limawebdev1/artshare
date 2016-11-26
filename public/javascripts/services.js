@@ -28,13 +28,16 @@ app.service('postsService', function($http) {
    return $http.post('/api/delpost', reqObj).then(function(response) {
     return response.data;
    })
- },
- changeVotes: function(num, id) {
-   var reqObj = {num: num, id: id};
-   return $http.post('/api/changeVote', reqObj).then(function(response){
-     return response.data;
+  },
+  changeVotes: function(num, id) {
+   var reqObj = {
+    num: num,
+    id: id
+   };
+   return $http.post('/api/changeVote', reqObj).then(function(response) {
+    return response.data;
    })
- }
+  }
  }
 })
 app.service('commentsService', function($http) {
@@ -43,7 +46,18 @@ app.service('commentsService', function($http) {
    return $http.post('/api/comment', obj).then(function(data) {
     return data.data;
    })
-  }
+  },
+  editComment: function(obj) {
+   return $http.post('/api/editComment', obj).then(function(data) {
+    return data.data;
+   })
+ },
+ deleteComment: function(id){
+   var obj = {id: id}
+   return $http.post('/api/delComment', obj).then(function(data){
+     return data.data;
+   })
+ }
  }
 })
 app.service('authService', function($http, $location) {
