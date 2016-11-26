@@ -55,26 +55,28 @@
         <span>by: {{post.username}} </span>
         <a ng-show="post.username == username" ng-click="deletePost(post.id)" class="carda right btn-floating btn-small waves-effect waves-light red"><i class="material-icons">delete</i></a>
         <a ng-show="post.username == username" ng-click="action=false; vm.add=false; vm.edit=true" class="carda activator right btn-floating btn-small waves-effect waves-light green"><i class="material-icons">mode_edit</i></a>
-        <br><br>
-        <p>{{post.description}}</p><br>
+        <br>
+        <br>
+        <p>{{post.description}}</p>
+        <br>
         <p class="right">
           {{post.updated_at | amCalendar}}
-        </p><br>
+        </p>
+        <br>
       </div>
       <div class="card-action" ng-show="action==true">
         <a ng-click="changeVotes('-', post.id)">-</a> {{post.votes}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <a class="downvote" ng-click="changeVotes('+', post.id)">+</a>
         <a class="activator right" ng-click="action=false; vm.add=true; vm.edit=false;"><i class="material-icons">add</i></a>
         <a class="center">
-            <ng-pluralize count="post.comments.length" when="{'1': '{{post.comments.length}} comment','other': '{{post.comments.length}} comments'}" class="activator center" ng-click="action=false; view=true; vm.add=false"></ng-pluralize>
-          </a>
+          <ng-pluralize count="post.comments.length" when="{'1': '{{post.comments.length}} comment','other': '{{post.comments.length}} comments'}" class="activator center" ng-click="action=false; view=true; vm.add=false"></ng-pluralize>
+        </a>
       </div>
       <div class="card-reveal" ng-hide="action">
         <div ng-show="vm.add">
           <span class="card-title grey-text text-darken-4">Add a Comment<i class="material-icons right" ng-click="vm.add=false;view=false; action=true;">close</i></span>
-          <input class="col s5" type="text" placeholder="Author" ng-model="cAuth" ng-class="{invalid: cNoAuth == true}"></input>
           <textarea class="col s5 materialize-textarea" type="text" placeholder="Write something here..." ng-model="cComment" ng-class="{invalid: cNoComment == true}"></textarea>
-          <a class="waves-effect waves-light btn right" ng-click="cValidate(post.id, cAuth, cComment); cAuth=undefined; cComment=undefined; action=true;">Submit</a>
+          <a class="waves-effect waves-light btn right" ng-click="cValidate(post.id, cComment); cAuth=undefined; cComment=undefined; action=true;">Submit</a>
         </div>
         <div ng-show="view">
           <span ng-click="vm.add=false;view=false" class="card-title grey-text text-darken-4"><i class="material-icons right">close</i></span>
@@ -91,25 +93,27 @@
           <span ng-click="vm.add=false;view=false;vm.edit=true" class="card-title grey-text text-darken-4"><i class="material-icons right">close</i></span>
           <h4>Edit Your Post</h4>
           <hr>
-          <div class="row">
-            <div class="input-field col s12">
-              <input id="title" type="text" ng-model="post.title"></input>
-              <label for="title">Title</label>
+          <form class="col s12">
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="title" type="text" ng-model="post.title"></input>
+                <label class="active" for="title">Title</label>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="input-field col s12">
-              <input id="img" type="text" ng-model="post.img"></input>
-              <label for="img">Image URL</label>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="img" type="text" ng-model="post.img"></input>
+                <label class="active" for="img">Image URL</label>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="input-field col s12">
-              <textarea id="desc" class="materialize-textarea" ng-model="post.description" type="text"></textarea>
-              <label for="desc">Description</label>
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea id="desc" class="materialize-textarea" ng-model="post.description" type="text"></textarea>
+                <label class="active" for="desc">Description</label>
+              </div>
             </div>
-          </div>
-          <a class="waves-effect waves-light btn right" ng-click="editPost(post.id, post.title, post.description, post.img); vm.edit=false; action=true">Submit</a>
+            <a class="waves-effect waves-light btn right" ng-click="editPost(post.id, post.title, post.description, post.img); vm.edit=false; action=true">Submit</a>
+          </form>
         </div>
       </div>
     </div>

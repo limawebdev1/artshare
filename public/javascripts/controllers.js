@@ -1,4 +1,4 @@
-app.controller('main', function($scope, $cookies, postsService, cookieService, $location) {
+app.controller('main', function($scope, $cookies, postsService, commentsService, cookieService, $location) {
  $scope.view = false;
  $scope.vm = {};
  $scope.searchTxt = "";
@@ -61,15 +61,6 @@ app.controller('main', function($scope, $cookies, postsService, cookieService, $
        updated_at: obj.updated_at,
        votes:0, comments:[]
      });
-     $scope.vm.allPosts.push({
-       id:$scope.vm.posts.length+1,
-       title: obj.title,
-       img: obj.img,
-       description: obj.description,
-       username: $scope.username,
-       updated_at: obj.updated_at,
-       votes:0, comments:[]
-     });
      $scope.sortBy($scope.type);
    })
    $scope.title = undefined;
@@ -77,6 +68,32 @@ app.controller('main', function($scope, $cookies, postsService, cookieService, $
    $scope.author = undefined;
    $scope.desc = undefined;
    $scope.newPost = false;
+  }
+ }
+ $scope.cValidate = function(p_id, comment) {
+  $scope.valid = true;
+  if (comment == undefined) {
+   $scope.cNoComment = true;
+   $scope.valid = false;
+  }
+  if ($scope.valid === true) {
+   var obj = {
+    post_id: p_id,
+    username: $scope.username,
+    description: comment
+   }
+   commentsService.postComment(obj).then((response) =>{
+     var elem;
+     for(var i = 0; i < $scope.vm.posts.length; i++){
+       var theId = $scope.vm.posts[i].id;
+       if(theId === p_id){
+         elem = i;
+       }
+     }
+     $scope.vm.posts[elem].comments.push(obj);
+   });
+   $scope.view = true;
+   $scope.vm.add = false;
   }
  }
  $scope.changeVotes = function(sym, id){
